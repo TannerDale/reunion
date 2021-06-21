@@ -26,4 +26,3 @@ class Reunion
     total
   end
 end
-g
