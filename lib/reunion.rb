@@ -31,4 +31,40 @@ class Reunion
       "#{name}: #{amount}"
     }.join("\n")
   end
+
+  def detailed_breakout
+    all_participants = @activities.map { |activity|
+      activity.participants.keys
+    }.flatten.uniq
+
+    detailed = Hash.new { |hash, key| hash[key] = [] }
+
+    all_participants.each do |participant|
+      @activities.each do |activity|
+        total_participants = activity.participants.size
+
+        if activity.participants.has_key?(participant)
+          if activity.owed[participant] < 0
+            payees = activity.owed.each.filter_map do |name, amount|
+              name if amount > 0
+            end
+
+          else
+            payees = activity.owed.each.filter_map do |name, amount|
+              name if amount < 0
+            end
+          end
+
+          amount_per = activity.owed[participant] / payees.size
+          activity_info = {
+            activity: activity.name,
+            payees: payees,
+            amount: amount_per
+          }
+          detailed[participant] << activity_info
+        end
+      end
+    end
+    detailed
+  end
 end
