@@ -25,4 +25,10 @@ class Reunion
     end
     total
   end
+
+  def summary
+    breakout.each.map { |name, amount|
+      "#{name}: #{amount}"
+    }.join("\n")
+  end
 end
