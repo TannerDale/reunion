@@ -37,34 +37,31 @@ class Reunion
       activity.participants.keys
     }.flatten.uniq
 
-    detailed = Hash.new { |hash, key| hash[key] = [] }
+    all_participants.map { |participant|
 
-    all_participants.each do |participant|
-      @activities.each do |activity|
-        total_participants = activity.participants.size
+      participant_activity_info = @activities.filter_map do |activity|
+        activity_participants = activity.participants.keys
 
-        if activity.participants.has_key?(participant)
-          if activity.owed[participant] < 0
-            payees = activity.owed.each.filter_map do |name, amount|
+        if activity_participants.include?(participant)
+          payees = activity.owed.each.filter_map do |name, amount|
+            if activity.owed[participant] < 0
               name if amount > 0
-            end
-          else
-            payees = activity.owed.each.filter_map do |name, amount|
+            else
               name if amount < 0
             end
           end
 
           amount_per = activity.owed[participant] / payees.size
-          activity_info = {
+
+          {
             activity: activity.name,
             payees: payees,
             amount: amount_per
           }
-          detailed[participant] << activity_info
         end
-        
       end
-    end
-    detailed
+      [participant, participant_activity_info]
+
+    }.to_h
   end
 end
