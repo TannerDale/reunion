@@ -13,4 +13,14 @@ class Activity
   def total_cost
     @participants.values.sum
   end
+
+  def split
+    total_cost / @participants.keys.size
+  end
+
+  def owed
+    @participants.each.map { |name, cost|
+      [name, split - cost]
+    }.to_h
+  end
 end
