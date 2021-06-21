@@ -33,4 +33,14 @@ RSpec.describe 'Activity' do
 
     expect(activity.total_cost).to eq(60)
   end
+
+  it 'calculates what someone owes' do
+    activity = Activity.new("Brunch")
+    activity.add_participant("Maria", 20)
+    activity.add_participant("Luther", 40)
+
+    split = 60 / 2
+    expect(activity.split).to eq(split)
+    expect(activity.owed).to eq({"Maria" => 10, "Luther" => -10})
+  end
 end
