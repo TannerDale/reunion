@@ -48,7 +48,6 @@ class Reunion
             payees = activity.owed.each.filter_map do |name, amount|
               name if amount > 0
             end
-
           else
             payees = activity.owed.each.filter_map do |name, amount|
               name if amount < 0
@@ -63,6 +62,7 @@ class Reunion
           }
           detailed[participant] << activity_info
         end
+        
       end
     end
     detailed
