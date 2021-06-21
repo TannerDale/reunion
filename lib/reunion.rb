@@ -38,7 +38,6 @@ class Reunion
     }.flatten.uniq
 
     all_participants.map { |participant|
-
       participant_activity_info = @activities.filter_map do |activity|
         activity_participants = activity.participants.keys
 
@@ -50,18 +49,16 @@ class Reunion
               name if amount < 0
             end
           end
-
           amount_per = activity.owed[participant] / payees.size
-
           {
             activity: activity.name,
             payees: payees,
             amount: amount_per
           }
         end
+
       end
       [participant, participant_activity_info]
-
     }.to_h
   end
 end
